@@ -54,20 +54,8 @@ npm run lint
 # (Add unit tests as needed)
 ```
 
-### E2E (Cypress)
-
-```sh
-cd frontend
-npm run dev # (in one terminal)
-npx cypress open # or npx cypress run
-```
-
-- E2E tests are in `frontend/cypress/e2e/`
-- See test output and screenshots for failures
-
 ## Deployment & Scaling
 
-- See [DEPLOYMENT.md](./DEPLOYMENT.md) for production, monitoring, and scaling instructions
 - See [backend/README.md](./backend/README.md) for MongoDB backup/restore
 
 ## Troubleshooting
@@ -85,5 +73,5 @@ docker exec -it links-shortener-mongo-1 mongosh shortener --eval 'db.urls.find()
 
 ## Maintainer
 
-- Your Name (<your@email.com>)
-- [GitHub Issues](https://github.com/your/repo/issues)
+- Alexander Extim (<it@extim.su>)
+- [GitHub Issues](https://github.com/extimsu/links-shortener/issues)
