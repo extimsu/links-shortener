@@ -27,5 +27,5 @@ dist
 .cu*
 .vi
 scripts
-.target
+target
 .github/instructions/

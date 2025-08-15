@@ -7,7 +7,7 @@ networks:
 
 services:
   backend:
-    build: ./backend
+    image: ghcr.io/extimsu/links-shortener-backend:latest
     env_file:
       - ./backend/.env.prod
     depends_on:
@@ -27,6 +27,15 @@ services:
       - RUST_LOG=backend=info,actix_web=info
       - SERVICE_NAME=url-shortener
       - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-api.tls=true"
+      - "traefik.http.routers.backend-api.entrypoints=websecure"
+      - "traefik.http.routers.backend-api.rule=Host(`api.links.extim.su`)"
+      - "traefik.http.services.backend-api-svc.loadbalancer.server.port=8080"
+      - "traefik.http.routers.backend-api.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.backend-api.tls.options=intermediate@file"
+      - "traefik.http.routers.backend-api.middlewares=default@file"
     logging:
       driver: "json-file"
       options:
@@ -34,12 +43,21 @@ services:
         max-file: "3"
 
   frontend:
-    build: ./frontend
+    image: ghcr.io/extimsu/links-shortener-frontend:latest
     ports:
-      - "3000:8080"
+      - "8080:8080"
     depends_on:
       - backend
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-links.tls=true"
+      - "traefik.http.routers.frontend-links.entrypoints=websecure"
+      - "traefik.http.routers.frontend-links.rule=Host(`links.extim.su`)"
+      - "traefik.http.services.frontend-links-svc.loadbalancer.server.port=8080"
+      - "traefik.http.routers.frontend-links.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.frontend-links.tls.options=intermediate@file"
+      - "traefik.http.routers.frontend-links.middlewares=default@file"
     networks:
       - appnet
 
@@ -48,7 +66,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongodata:/data/db
+      - ./mongodata:/data/db
     restart: unless-stopped
     networks:
       - appnet
@@ -57,7 +75,6 @@ services:
         limits:
           cpus: '0.50'
           memory: 1G
-
 
 volumes:
   mongodata:

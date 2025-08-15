@@ -1,22 +1,26 @@
 # ---- Build Stage ----
-FROM rust:latest as build
-WORKDIR /app
-COPY . .
-RUN cargo build --release
+FROM messense/cargo-zigbuild:latest as builder
 
-# ---- Runtime Stage ----
-FROM debian:bookworm-slim
-LABEL maintainer="Your Name <your@email.com>"
-LABEL org.opencontainers.image.source="https://github.com/your/repo"
 WORKDIR /app
-COPY --from=build /app/target/release/backend /app/backend
-# Create a non-root user and use it
-RUN mkdir -p /var/log/url_shortener && chmod 755 /var/log/url_shortener
-RUN useradd -m appuser && chown -R appuser /app
-USER appuser
-# Expose the backend port
-EXPOSE 8080
-# Set environment variables (override with Docker/K8s secrets in prod)
+
+# 1. Cache dependencies
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release || true
+RUN rm src/main.rs
+
+# 2. Copy source and build
+COPY src/ ./src/
+
+RUN cargo zigbuild --release --bin backend --target aarch64-unknown-linux-musl
+
+# Runtime stage
+FROM scratch
+LABEL maintainer="Alexander Extim <it@extim.su>"
+LABEL org.opencontainers.image.source="https://github.com/extimsu/backend"
+COPY --from=builder /app/target/aarch64-unknown-linux-musl/release/backend /usr/local/bin/backend
 ENV APP_ENV=production
 ENV RUST_LOG=info
-CMD ["/app/backend"]
+EXPOSE 8080
+
+ENTRYPOINT ["/usr/local/bin/backend"]
