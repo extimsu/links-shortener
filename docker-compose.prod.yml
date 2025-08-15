@@ -10,8 +10,6 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
-    networks:
-      - appnet
     deploy:
       resources:
         limits:
@@ -71,13 +69,9 @@ services:
     volumes:
       - ./mongodata:/data/db
     restart: unless-stopped
-    networks:
-      - appnet
     deploy:
       resources:
         limits:
           cpus: '0.50'
           memory: 1G
 
-volumes:
-  mongodata:
