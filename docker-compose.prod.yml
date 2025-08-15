@@ -57,11 +57,7 @@ services:
     network_mode: bridge
     links:
       - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
-      interval: 5s
-      timeout: 5s
-      retries: 3
+
   mongo:
     image: mongo:7
     ports:
