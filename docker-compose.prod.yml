@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: ghcr.io/extimsu/links-shortener/links-shortener-frontend:arm64-latest 
+    image: docker.io/extim/links-shortener-frontend:arm64-latest
     env_file:
       - ./backend/.env.prod
     depends_on:
@@ -39,7 +39,7 @@ services:
         max-file: "3"
 
   frontend:
-    image: ghcr.io/extimsu/links-shortener/links-shortener-frontend:latest
+    image: docker.io/extim/links-shortener-frontend:arm64-latest
     ports:
       - "8080:8080"
     depends_on:
