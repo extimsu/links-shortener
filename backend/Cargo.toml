@@ -11,3 +11,21 @@ serde_json = "1"
 mongodb = "2"
 dotenvy = "0.15"
 rand = "0.8"
+log = "0.4"
+actix-rt = "2"
+url = "2"
+thiserror = "1"
+sqlx = { version = "0.7", features = ["runtime-tokio", "postgres"] }
+redis = "0.24"
+actix-cors = "0.7"
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-actix-web = "0.7"
+uuid = { version = "1", features = ["v4"] }
+opentelemetry = { version = "0.18", features = ["rt-tokio"] }
+opentelemetry-jaeger = { version = "0.17", features = ["rt-tokio"] }
+tracing-opentelemetry = "0.18"
+futures = "0.3"
+chrono = { version = "0.4", features = ["serde", "alloc"] }
+jsonwebtoken = "9"
+time = "0.3"

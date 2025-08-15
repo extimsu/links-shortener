@@ -1,3 +1,21 @@
+# Running the Frontend with Docker
+
+To build and run the frontend using Docker and Docker Compose:
+
+1. Make sure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed.
+2. From the project root, run:
+
+```sh
+docker-compose up --build
+```
+
+This will build and start all services, including the frontend, backend, and MongoDB.
+
+- The frontend will be available at: [http://localhost:3000](http://localhost:3000)
+- The backend API will be available at: [http://localhost:8080](http://localhost:8080)
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

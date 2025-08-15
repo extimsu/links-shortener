@@ -1,0 +1,63 @@
+version: '3.8'
+
+# Custom network for service isolation
+networks:
+  appnet:
+    driver: bridge
+
+services:
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env.prod
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - appnet
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    environment:
+      - APP_ENV=production
+      - RUST_LOG=backend=info,actix_web=info
+      - SERVICE_NAME=url-shortener
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:8080"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - appnet
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    restart: unless-stopped
+    networks:
+      - appnet
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1G
+
+
+volumes:
+  mongodata:
