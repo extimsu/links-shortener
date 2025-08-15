@@ -65,6 +65,7 @@ services:
     volumes:
       - ./mongodata:/data/db
     restart: unless-stopped
+    network_mode: bridge
     deploy:
       resources:
         limits:
