@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use rand::{distributions::Alphanumeric, Rng};
 use mongodb::options::{ClientOptions, ServerApi, ServerApiVersion};
-use url_service::{UrlService, UrlServiceError};
+use url_service::UrlService;
 use actix_cors::Cors;
 use tracing_actix_web::TracingLogger;
 use log::error;
-use chrono::{Utc, DateTime, NaiveDateTime};
+use chrono::{Utc, DateTime};
 mod url_service;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -62,7 +62,7 @@ async fn health_check() -> impl Responder {
     HttpResponse::Ok().body("OK")
 }
 
-async fn db_health(client: web::Data<Client>) -> impl Responder {
+async fn db_health(_client: web::Data<Client>) -> impl Responder {
     // REMOVE admin database ping
     HttpResponse::Ok().body("DB OK")
 }

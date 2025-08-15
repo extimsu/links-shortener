@@ -28,4 +28,4 @@ dist
 .vi
 scripts
 target
-.github/instructions/
+.github/i*

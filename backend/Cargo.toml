@@ -15,8 +15,6 @@ log = "0.4"
 actix-rt = "2"
 url = "2"
 thiserror = "1"
-sqlx = { version = "0.7", features = ["runtime-tokio", "postgres"] }
-redis = "0.24"
 actix-cors = "0.7"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
