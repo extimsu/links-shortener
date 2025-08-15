@@ -1,10 +1,5 @@
 version: '3.8'
 
-# Custom network for service isolation
-networks:
-  appnet:
-    driver: bridge
-
 services:
   backend:
     image: ghcr.io/extimsu/links-shortener/links-shortener-frontend:arm64-latest 
@@ -36,6 +31,9 @@ services:
       - "traefik.http.routers.backend-api.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend-api.tls.options=intermediate@file"
       - "traefik.http.routers.backend-api.middlewares=default@file"
+    network_mode: bridge
+    links:
+      - mongo
     logging:
       driver: "json-file"
       options:
@@ -58,9 +56,14 @@ services:
       - "traefik.http.routers.frontend-links.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend-links.tls.options=intermediate@file"
       - "traefik.http.routers.frontend-links.middlewares=default@file"
-    networks:
-      - appnet
-
+    network_mode: bridge
+    links:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
   mongo:
     image: mongo:7
     ports:
