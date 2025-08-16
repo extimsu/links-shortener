@@ -1,6 +1,7 @@
 # Links Shortener
 
 A full-stack URL shortening service with analytics, built with Rust (backend), React (frontend), and MongoDB. Production-ready with Docker Compose, robust UI/UX, and E2E tests.
+Deployed: <https://links.extim.su>
 
 ## Features
 
